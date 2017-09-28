@@ -290,7 +290,7 @@ describe('capture session', () => {
                         browserStub.config.compositeImage = true;
                     });
 
-                    it('should scroll vertically if capture area is higher then viewport', () => {
+                    it('should scroll vertically if capture area is higher than viewport', () => {
                         page = {captureArea: {height: 7}, viewport: {top: 0, height: 5}};
 
                         return captureSession.capture(page)
