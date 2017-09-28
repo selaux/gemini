@@ -236,6 +236,9 @@ Settings list:
 
   :warning: Option does not work in Opera@12.16.
 
+* `screenshotDelay` — when `compositeImage` is used this option can specify a delay between scrolling the page and making the screenshot (default: `0`).
+  This is useful when scrolling the page causes elements to appear with CSS animations.
+
 ## Sets
 
 You can link some set of tests with certain browsers using `sets`.

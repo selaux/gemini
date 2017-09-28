@@ -290,6 +290,42 @@ describe('capture session', () => {
                         browserStub.config.compositeImage = true;
                     });
 
+                    describe('option screenshotDelay is larger than 0', () => {
+                        let clock;
+                        let delay;
+
+                        beforeEach(() => {
+                            browserStub.config.screenshotDelay = 42;
+                            clock = sinon.useFakeTimers(0);
+                            delay = sinon.stub(Promise, 'delay');
+                        });
+
+                        afterEach(() => {
+                            clock.restore();
+                            delay.restore();
+                        });
+
+                        it('should wait the given amount of milliseconds between after scrolling', () => {
+                            page = {captureArea: {height: 7}, viewport: {top: 0, height: 5}};
+
+                            const scrolledPage = {captureArea: {height: 7}, viewport: {top: 2, height: 5}};
+
+                            const scroll = browserStub.scrollBy.withArgs(0, 2).named('scroll');
+                            const captureViewportImage = browserStub.captureViewportImage
+                                .withArgs(scrolledPage).named('captureViewportImage');
+
+                            const promise = captureSession.capture(page);
+
+                            clock.tick(50);
+
+                            return promise
+                                .then(() => {
+                                    assert.callOrder(scroll, delay, captureViewportImage);
+                                    assert.calledWith(delay, 42);
+                                });
+                        });
+                    });
+
                     it('should scroll vertically if capture area is higher than viewport', () => {
                         page = {captureArea: {height: 7}, viewport: {top: 0, height: 5}};
 
